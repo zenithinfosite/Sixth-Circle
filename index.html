@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Sixth Circle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --void:      #0e0f10;
+  --void-dark: #08090a;
+  --surface:   #17191b;
+  --rule:      #292c2f;
+  --rule-lit:  #3a3e42;
+  --dim:       #71767a;
+  --body:      #c6cacc;
+  --white:     #f1f2f2;
+  --red:       #8e2a24;
+  --red-lit:   #b0413a;
+
+  --measure:   68ch;
+  --wide:      1040px;
+  --gutter:    clamp(1.25rem, 5vw, 3rem);
+
+  --f-display: 'Archivo', system-ui, sans-serif;
+  --f-body:    'IBM Plex Sans', system-ui, sans-serif;
+  --f-mono:    'IBM Plex Mono', ui-monospace, monospace;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  margin:0;
+  background:var(--void);
+  color:var(--body);
+  font-family:var(--f-body);
+  font-size:17px;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+body.is-locked{overflow:hidden}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+html{
+  scrollbar-width:thin;
+  scrollbar-color:var(--red) var(--void-dark);
+}
+::-webkit-scrollbar{width:12px;height:12px}
+::-webkit-scrollbar-track{background:var(--void-dark)}
+::-webkit-scrollbar-thumb{
+  background:var(--red);
+  border:3px solid var(--void-dark);
+  border-radius:0;
+}
+::-webkit-scrollbar-thumb:hover{background:var(--red-lit)}
+::-webkit-scrollbar-corner{background:var(--void-dark)}
+
+img{max-width:100%;display:block}
+a{color:var(--white);border-bottom:1px solid var(--red);text-decoration:none}
+a:hover{color:var(--red-lit)}
+:focus-visible{outline:2px solid var(--red-lit);outline-offset:3px}
+
+/* ============================================================
+   GATE
+   ============================================================ */
+.gate{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:grid;
+  place-items:center;
+  background:var(--void);
+  cursor:pointer;
+  transition:opacity .8s ease, visibility .8s ease;
+}
+.gate.is-gone{opacity:0;visibility:hidden;pointer-events:none}
+.gate p{
+  margin:0;
+  padding-top:1.25rem;
+  border-top:2px solid var(--red);
+  font-family:var(--f-mono);
+  font-size:.8125rem;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--dim);
+}
+
+/* ============================================================
+   DOCUMENT
+   ============================================================ */
+.doc{
+  max-width:var(--wide);
+  margin:0 auto;
+  padding:0 var(--gutter);
+}
+
+.masthead{
+  padding:clamp(6rem,22vh,13rem) 0 clamp(3.5rem,9vh,6rem);
+  border-bottom:2px solid var(--red);
+}
+.masthead__standfirst{
+  max-width:var(--measure);
+  font-size:1.125rem;
+  color:var(--dim);
+  margin:1.75rem 0 0;
+}
+.masthead h1{
+  font-family:var(--f-display);
+  font-weight:800;
+  font-size:clamp(2.75rem,10vw,6.5rem);
+  line-height:.92;
+  letter-spacing:-.03em;
+  text-transform:uppercase;
+  color:var(--white);
+  margin:0;
+}
+
+.chapter{
+  padding:clamp(4rem,11vh,7rem) 0;
+  border-bottom:1px solid var(--rule);
+}
+.chapter:last-of-type{border-bottom:0}
+
+.chapter__eyebrow{
+  font-family:var(--f-mono);
+  font-size:.75rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--red-lit);
+  margin:0 0 .75rem;
+}
+.chapter h2{
+  font-family:var(--f-display);
+  font-weight:700;
+  font-size:clamp(1.625rem,4vw,2.5rem);
+  line-height:1.08;
+  letter-spacing:-.015em;
+  text-transform:uppercase;
+  color:var(--white);
+  margin:0 0 2rem;
+  max-width:22ch;
+}
+.chapter h3{
+  font-family:var(--f-display);
+  font-weight:600;
+  font-size:1rem;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  color:var(--white);
+  margin:2.75rem 0 1rem;
+  max-width:var(--measure);
+}
+.chapter p{
+  max-width:var(--measure);
+  margin:0 0 1.5rem;
+}
+.chapter p:last-child{margin-bottom:0}
+
+.chapter blockquote{
+  max-width:var(--measure);
+  margin:2.25rem 0;
+  padding-left:1.25rem;
+  border-left:2px solid var(--red);
+  font-style:italic;
+  color:var(--body);
+}
+.chapter blockquote p{margin:0 0 1rem}
+.chapter blockquote p:last-child{margin-bottom:0}
+.chapter blockquote cite{
+  display:block;
+  margin-top:.75rem;
+  font-family:var(--f-mono);
+  font-style:normal;
+  font-size:.75rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--dim);
+}
+
+/* ============================================================
+   FIGURES
+     .fig            text-column width
+     .fig--wide      full content width
+     .fig--bleed     edge to edge
+     .fig--pair      two side by side
+   Delete "is-empty" and swap .slot for <img> when adding art.
+   ============================================================ */
+.fig{margin:3rem 0;max-width:var(--measure)}
+.fig--wide{max-width:100%}
+.fig--bleed{max-width:none;width:100vw;margin-left:50%;transform:translateX(-50%)}
+.fig img{width:55%;height:auto;margin:0 auto;background:var(--surface)}
+.fig--start img{margin-left:0}
+.fig--xl img{width:71.5%}
+.fig figcaption{
+  width:55%;
+  margin:.875rem auto 0;
+  padding-top:.75rem;
+  border-top:1px solid var(--rule);
+  font-family:var(--f-mono);
+  font-size:.75rem;
+  line-height:1.7;
+  color:var(--dim);
+  max-width:60ch;
+}
+.fig--start figcaption{margin-left:0;margin-right:auto}
+.fig figcaption b{
+  color:var(--red-lit);
+  font-weight:400;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.fig--pair{max-width:100%;display:grid;grid-template-columns:1fr 1fr;gap:0}
+.fig--pair img{width:68.75%}
+.fig--pair img:first-of-type{margin:0 0 0 auto}
+.fig--pair img:last-of-type{margin:0 auto 0 0}
+.fig--pair figcaption{grid-column:1/-1;width:100%;margin-left:0;margin-right:0}
+
+.fig.is-empty .slot{
+  aspect-ratio:3/2;
+  border:1px dashed var(--rule-lit);
+  display:grid;
+  place-items:center;
+  font-family:var(--f-mono);
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--rule-lit);
+  background:var(--surface);
+}
+
+/* ============================================================
+   VOLUME SLIDER
+   ============================================================ */
+.vol{
+  position:fixed;
+  right:1.5rem;
+  bottom:1.5rem;
+  z-index:50;
+  width:120px;
+  height:20px;
+  appearance:none;
+  -webkit-appearance:none;
+  background:transparent;
+  cursor:pointer;
+  opacity:0;
+  transition:opacity .6s ease;
+}
+.vol.is-on{opacity:1}
+
+.vol::-webkit-slider-runnable-track{
+  height:2px;
+  background:var(--rule-lit);
+}
+.vol::-moz-range-track{
+  height:2px;
+  background:var(--rule-lit);
+}
+.vol::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:3px;
+  height:14px;
+  margin-top:-6px;
+  border:0;
+  border-radius:0;
+  background:var(--red-lit);
+}
+.vol::-moz-range-thumb{
+  width:3px;
+  height:14px;
+  border:0;
+  border-radius:0;
+  background:var(--red-lit);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:900px){ .fig--pair{grid-template-columns:1fr} }
+@media (max-width:600px){ body{font-size:16px} }
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition-duration:.01ms !important}
+}
+</style>
+</head>
+<body class="is-locked">
+
+<div class="gate" id="gate"><p>Click anywhere</p></div>
+
+<main class="doc">
+
+  <header class="masthead">
+    <h1>The<br>Sixth<br>Circle</h1>
+    <p class="masthead__standfirst">"A State's Right To Exist Is Proportional To Its Armaments" - THE GUARANTEE/SUN</p>
+  </header>
+
+  <!-- ============ CHAPTER ============ -->
+  <section class="chapter" id="overview">
+    <h2>Overview</h2>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image10.png" alt="Illustration by Christopher Richard Wynne Nevinson">
+      <figcaption><b>Illustration by Christopher Richard Wynne Nevinson</b></figcaption>
+    </figure>
+
+    <p>The Sixth Circle is an organization of underground arms dealers that operates within China, primarily from within Hong Kong. Their history dates back to the 1920s, rooted in the origins of Chinese Communism.</p>
+    <p>The Sixth Circle, while a criminal organization, is also a political group, one that utilizes its illicit activities and nature to fund itself. The ideology of the Sixth Circle is one known as Technomilitant-Communism.</p>
+    <p>Named after two principles, the "Sixth Circle" embodies prosperity, fortune, and unity. The name was originally adopted in 1922, and has remained in use ever since.</p>
+    <p>The Sixth Circle was once a much larger organization than it is now, with its operations now being cordoned off only to sections of Hong Kong, rather than the greater surrounding region.</p>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image13.png" alt="">
+    </figure>
+  </section>
+
+  <section class="chapter" id="early-years">
+    <p class="chapter__eyebrow">1901 &ndash; 1922</p>
+    <h2>Early Years</h2>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image27.jpg" alt="CCP leadership in 1938">
+      <figcaption>CCP leadership in 1938.</figcaption>
+    </figure>
+
+    <p>The origins of the Sixth Circle trace back to a pair of men: Guo Weiguo and Sun Xueqin, born 1901 and 1903 respectively. These two individuals were both children of academics. Having met at a young age, they formed a powerful friendship and lifelong bond.</p>
+    <p>Both Guo and Sun were staunch communists from their youth, invigorated by their own parents who engaged in leftist ideology. While they participated in theory and attended occasional gatherings, it was not until they attended the first national congress in 1921 at Shanghai, held by the newly created Chinese Communist Party, that Guo and Sun would see a path to manifest their beliefs into more than just thought.</p>
+    <p>This first congress was called when Soviet Communist International (Comintern) representatives Vladimir Neumann and Henk Sneevliet arrived in Shanghai, and urged local Communist figures to call a greater assembly and form an official, national party.</p>
+    <p>After the congress, both Guo and Sun became active scholars of Communist thought, engaging with contemporary thinkers in Moscow, Berlin, and even Istanbul. They would too become part of the CCP, and rapidly gain respect for their mutual intellect, soon moving to the north-western regions of China, specifically Gansu. There, they would recruit other disillusioned or impassioned youth, forming the Sixth Circle, a branch of the newly formed CCP.</p>
+    <p>During this time, Guo Weiguo would act as the face of the organization, giving speeches and rallying their members, while Sun, who was more soft-spoken and reserved, worked to write the speeches and commune with other intellectuals.</p>
+    <p>This was not to say that Guo Weiguo was not too an intellectual, rather that the pair chose to divide the management of this newly blossoming organization in a manner that most reflected their individual talents. It was simply the most effective manner to operate, and Guo would usually edit and discuss the speeches with Sun before giving them.</p>
+  </section>
+
+  <section class="chapter" id="comintern">
+    <p class="chapter__eyebrow">1922 &ndash; 1927</p>
+    <h2>Shift/Comintern</h2>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image24.png" alt="">
+    </figure>
+
+    <p>During the early 1920s, it became the view of the Bolsheviks and the greater International Communist movement that the figurehead for a revolutionary motion in China should be the Kuomintang, rather than the Chinese Communist Party. This was rooted in the understanding that the KMT was the most active, most efficient, and most viable progressive force in China. To this end, Moscow believed that the CCP must incorporate under and alongside the KMT.</p>
+    <p>In August of 1922, Sneevliet proposed that the CCP join the KMT, and when met with opposition, utilized the authority of the Comintern to force the decision.</p>
+    <p>This meant, in effect, that Leninism would become the new model for the CCP. The party was structured into a Leninist vanguard, designed to lead the way for a greater revolution.</p>
+    <p>This restructuring was viewed positively by Guo and Sun, who believed the vanguard principle to align strongly with their own experiences forming and running the Sixth Circle. The principle being that a working class could not achieve organized revolution on their own, and that they would require the support of a full-time, capable and centralized revolutionary front to direct energy.</p>
+    <p>Guo, more than Sun, adhered to this belief. Much of Guo's politics at the time were heavily rooted in Leninism, as he viewed it to be the most contemporary manifestation of Marx's original thoughts. As such, Guo was placed in charge of organizing the Sixth Circle's vanguard, which would become a closed, tight-knit group of intellectuals and military-men.</p>
+  </section>
+
+  <section class="chapter" id="upheaval">
+    <p class="chapter__eyebrow">1927 &ndash; 1934</p>
+    <h2>Upheaval</h2>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image22.png" alt="Severed heads of Communists displayed during the Shanghai Massacre, 1927">
+      <figcaption>During the Shanghai Massacre, severed heads of Communists were displayed. Photograph by Henk Alsem, 1927.</figcaption>
+    </figure>
+
+    <p>When in 1927, the KMT, under order of Chiang Kai-Shek, led the Shanghai Massacre, a violent suppression and destruction of CCP-aligned actors and individuals within Shanghai, the Chinese Civil War ignited. The massacre itself was the result of long-mounting party conflicts and internal disagreements, aided not at all by the meddling of the Comintern.</p>
+    <p>The massacre itself had a death toll in the thousands.</p>
+    <p>It was during this great upheaval that the Sixth Circle would align themselves further with the CCP's leadership, and begin to establish themselves as arms dealers and weapons smugglers. The vanguard formed by Guo utilized various connections, primarily supplied by several military members, to form a cohesive, rapid plan to acquire and supply the party with weapons and munitions.</p>
+
+    <figure class="fig fig--wide fig--xl fig--start">
+      <img src="images/image19.png" alt="Chiang Kai-shek">
+      <figcaption>Chiang Kai-shek</figcaption>
+    </figure>
+
+    <p>The Sixth Circle, originally situated in the North-West of China, began a long campaign of weapons acquisitions, theft, and mobilization. These weapons were taken primarily by stealing American arms supplied to the KMT, alongside seizing Japanese weapons from Manchuria.</p>
+    <p>Additionally, the Sixth Circle established a long network of routes from China to the Soviet Union, securing a slow but steady supply of weapons and aid from Moscow directly.</p>
+    <p>Guo was placed in charge of the continued theft and smuggling of weapons, while Sun worked to recruit new members to the Sixth Circle, confer with the Comintern, and ensure the Sixth Circle remained aligned with the party's momentum.</p>
+  </section>
+
+  <section class="chapter" id="japan">
+    <p class="chapter__eyebrow">1934 &ndash; 1941</p>
+    <h2>Japan</h2>
+
+    <p>In 1934, spurred by the collapse of the Jiangxi Soviet following the KMT's fifth encirclement campaign, Guo and Sun, alongside core members of the Sixth Circle vanguard, were directed to leave China. At the time, the KMT had achieved a clear, decisive advantage, and were likely to win the civil war. Fearing utter destruction, the CCP began hedging bets to ensure survival, by scattering certain, capable and loyal officials around Asia.</p>
+    <p>The Sixth Circle was sent to Japan by party leadership, a move which Guo opposed heavily, as Japan was actively invading China at the time. Guo believed that Japan would be the death of Sun and himself, alongside his vanguard, and he argued that it would be more logical to remain in mainland China and aid the party in regrouping.</p>
+    <p>Sun however, viewed this movement as a logical divestment. Specifically, Sun believed that the combination of his rhetorical skills with Guo's impassioned speeches could achieve a success akin to their victories in Gansu, where the Sixth Circle first grew its ranks and spread Communism throughout the region, but this time within Japan.</p>
+    <p>Upon their arrival in Japan, the Sixth Circle first went to ground, as the nation was actively persecuting left-wing thought with a draconian attitude at the time. The Sixth Circle became, not for the last time, nomadic.</p>
+    <p>They would move between cities and towns, recruiting youth to follow them, or leaving members behind in urban areas. Officially, the leaving behind of members was to spread their ideology further, but in reality, the pair hoped to slow down any efforts the Japanese made to chase them by presenting a list of auxiliary targets, distracting the government.</p>
+    <p>During this nomadic period, the Sixth Circle maintained its operations in China, spearheaded by close friends of Sun, who maintained rare communions with the pair through encoded letters. Additionally, the pair continued to update themselves on the developments made to Communist thought by their contemporaries. Although, in this matter, they refrained from active, outward communication, rather receiving whatever updates they could in one-way manifestos, letters, and essays.</p>
+  </section>
+
+  <section class="chapter" id="militant-mind">
+    <p class="chapter__eyebrow">1941 &ndash; 1945</p>
+    <h2>Birth of the Militant Mind</h2>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image23.png" alt="Guo and Sun photographed together at a shrine in Japan before splitting ways, circa 1941">
+      <figcaption><b>Guo and Sun, photographed together at an unknown Shrine in Japan before splitting ways, est 1941. This photo is believed to be the last time the pair saw one another.</b></figcaption>
+    </figure>
+
+    <p>Guo and Sun were within Japan when the nation attacked Pearl Harbour and officially entered into the second world war. The arrival of war caused a dramatic decline in their recruitment ability, and their ability to hide, as the Japanese youth became further radicalized towards nationalism. Fearing capture, the pair split ways, each taking a core grouping of loyalists with them, and going to ground on opposite sides of the nation.</p>
+    <p>During this time, the pair would, on occasion, write to one another. Most of these letters are gone, either lost or destroyed.</p>
+
+    <blockquote>
+      <p>Brother Guo, please read:</p>
+      <p>I have found myself now in the town of Oguni. It is a quiet place, and reminds me much of Gansu, and the people here are amicable compared to that of the city. I find myself worrying often of you, and of your ventures East.</p>
+      <p>Our departure, though needed, has left me with a sense of discomfort. I believe together, united, we may achieve anything, but divided? I am not so sure.</p>
+      <p>Of our people: few still remain from the vanguard. Much have either fled, or fallen. This continued, nomadic life, strains them, and I. I wonder if perhaps we may go to the mountains, and find some hiding place there? There are few people in these woods, and this path may prove itself fruitful. Think on this, and write back.</p>
+      <p>And now I ask, how are you? Are you well? What of the vanguard you brought with you? Has younger brother Hao returned, or is he, too, lost? Many such more inquiries flood my mind, relevant and irrelevant. But I find limited space on this page. When we meet again, I shall surely assail you with those questions.</p>
+      <p>Until then, respectfully, with hope that you find and retain safety,<br>Your younger brother, Sun, bows.</p>
+    </blockquote>
+
+    <p>In May of 1942, in the city of Osaka, Guo Weiguo was captured and summarily executed by the Japanese government for far-left politics and anti-state idealism. Word of Guo's death would not reach Sun until September of 1944. Although by then, Sun had already surmised, from the lack of letters, that Guo had been captured.</p>
+    <p>With his death, Guo's followers scattered, and only a handful would manage to flee the Japanese government for long enough to regroup with Sun.</p>
+    <p>When Sun gained confirmation of Guo's death, he underwent a new wave of paranoia, which had long been festering, and once more took to a highly nomadic way of life, moving between towns and cities rapidly. During this period, Sun had lost all communication with the Sixth Circle in China, and with the CCP, leaving him isolated and without information.</p>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image28.jpg" alt="">
+    </figure>
+
+    <p>Sun's constant movement placed him, fatefully, in the city of Hiroshima on August 6th of 1945. Here, he would bear witness to the first ever detonation of an atomic weapon. Sun was far enough away from the initial blast to survive, but near enough to witness it, and the corpses.</p>
+    <p>The unfettered, utter destruction and desolation caused by a singular weapon became, in turn, a singular image in Sun's mind. Martial supremacy, demonstrated by the United States, which forced Japan to surrender with not but two bombs, ending the war.</p>
+    <p>What a magnificent thing. What a dreadful thing. For one nation to say to another, "I am your better. Grovel," and for the lesser of the two to have no choice in the matter.</p>
+  </section>
+
+  <section class="chapter" id="new-communism">
+    <p class="chapter__eyebrow">1945 &ndash; 1949</p>
+    <h2>A New Communism</h2>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image12.png" alt="">
+    </figure>
+
+    <p>Sun would later cite his presence in Hiroshima when the bomb detonated as being a fateful encounter, ordained by the universe to grant him the needed inspiration and understanding to formulate a new, more accurate political and societal view.</p>
+    <p>It was this personal experience with the supremacy of human violence, the atomic bomb, that reframed the way in which Sun Xueqin would act for the rest of his life. From this incident, Sun developed a political theory now called Technomilitant-Communism.</p>
+    <p>Technomilitant-Communism became the core tenet of the Sixth Circle under Sun, who, following the Japanese Surrender, returned to China.</p>
+    <p>The beliefs of Technomilitant-Communism are specific. The system argues that for any effective communist state, or any state in general, to exist, there must be an absolute focus and emphasis on the development of military technology. Specifically, Sun believed that China must rush to acquire the newly developed atomic bomb, in order to guarantee its right to exist.</p>
+    <p>In many ways, Technomilitant-Communism acted as an expansion of Darwinism, extrapolated from individual survival of the fittest to apply instead to entire nations, cultures, and peoples.</p>
+
+    <figure class="fig fig--pair">
+      <img src="images/image7.png" alt="">
+      <img src="images/image6.png" alt="">
+    </figure>
+  </section>
+
+  <section class="chapter" id="divisions">
+    <p class="chapter__eyebrow">1949 &ndash; 1966</p>
+    <h2>Divisions</h2>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image14.png" alt="An academic is persecuted by the CCP">
+      <figcaption>An academic is persecuted by the CCP.</figcaption>
+    </figure>
+
+    <p>After his encounter with the atomic bomb, and the subsequent surrender of Japan, Sun returned, at last, to the mainland. Following his return, Sun wished to regain control of the Sixth Circle, but was met with opposition from the new leadership of the organization, who argued he had been gone too long.</p>
+    <p>After much debate, confrontation, and near-violence, Sun called for a mutual discussion. The leadership of the Sixth Circle came to meet Sun and his closest followers within the same building where the first National Conference was held.</p>
+    <p>They met in a circular chamber of stone and wood, centred on which was a round, stone table. The room was decorated plainly: a dark red carpet covered the floors; the walls had four tall ashen banners, and the table was bare aside from a silver plate for each chair, of which there stood twelve. There were six tall, large candles situated around the perimeter of the room, and the very centre of the chamber had a skylight that allowed the early-morning sun to flow in freely, illuminating dust motes.</p>
+    <p>When all members were gathered and seated, Sun began the discussion. They spoke for twenty minutes, and came to no agreement. Sun, resigned, informed them that he was finished with speaking. Subsequently, four men emerged from behind the four banners, each holding automatic weapons, and performed a more convincing method of negotiation. The color of the carpet barely changed.</p>
+    <p>Sun, once more, became the leader of the Sixth Circle on that morning.</p>
+    <p>Not long after, the Chinese Communist Party succeeded in ousting the KMT from mainland China to Taiwan. Following this victory, China, under Mao Zedong, entered a period known as the Great Leap Forward.</p>
+    <p>The Great Leap Forward aligned closely with Sun's views, and he personally assisted and involved himself with party leadership during this period. Primarily, the sought-after rapid industrialization of China and its ability to produce massive amounts of steel were Sun's greatest objectives, and the Sixth Circle played a notable part in enforcing various policies during the early stages of the Great Leap Forward. During this period, Sun, alongside certain other members of the CCP, actively played a part in convincing Mao to pursue the Great Leap Forward with a level of disregard for logistics that would later lead to devastation.</p>
+    <p>When poor planning and improper execution of this plan led to mass famines, Sun, and in turn the Sixth Circle, were blamed by party leadership. While Sun himself remained in a position of power, he was effectively removed from the upper rungs of the CCP and the Sixth Circle were shrunken back into their previous scale, reduced to arms dealers and weapons suppliers once more.</p>
+    <p>In Sun's view, this was a great injustice, as the famines borne from the Great Leap Forward were a necessary toll to pay for posterity and for an industrialized China.</p>
+    <p>Six years later, Mao orchestrated the Cultural Revolution, and this period would see the true splintering of the Sixth Circle from Maoist China. During the Cultural Revolution, Mao began persecution of academics and scholars. This persecution was spearheaded heavily by student groups.</p>
+    <p>This was directly antithetical to the new breed of Communism Sun was pioneering, as he believed academic minds were the backbone upon which a state could guarantee sovereignty through military. Without academics and scholars, he posited, a nation would lack the strength of arms to ensure itself.</p>
+    <p>Thus, during the Cultural Revolution, Sun and the Sixth Circle left China, scattering to Southeast Asia and the Soviet Union.</p>
+  </section>
+
+  <section class="chapter" id="return">
+    <p class="chapter__eyebrow">1966 &ndash; 1971</p>
+    <h2>Return to China</h2>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image3.png" alt="">
+    </figure>
+
+    <p>During their time away from China, the Sixth Circle further involved themselves in arms smuggling. They formed large, interconnected networks all across Asia, moving weapons across borders, supplying militant factions, and playing a pivotal role in providing weapons to North Vietnamese fighters during the Vietnam War.</p>
+    <p>Following the death of Mao Zedong and the rise of Deng Xiaoping as Party Head, the Sixth Circle made its return to China. At this time, Sun was nearing the end of his lifespan, and so began finalizing his manifesto, titled THE GUARANTEE, which espoused the necessity of a supreme military industrial complex, the requirement for a strong army, and the demand for advanced academic institutes to perpetuate new technology.</p>
+  </section>
+
+  <section class="chapter" id="america">
+    <p class="chapter__eyebrow">1971 &ndash; 1980s</p>
+    <h2>American Cooperation</h2>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image4.png" alt="">
+    </figure>
+
+    <p>In 1971, Henry Kissinger paid a visit to Pakistan during the genocidal crackdown on Bengalis within the East, dubbed Operation Searchlight. To avoid complicating Pakistan's cooperation, the United States refused to comment on the genocide.</p>
+    <p>There, he claimed to be sick and remained out of the public eye. This was, in reality, a cover to allow for Kissinger to secretly visit Beijing, aided by Pakistan who acted as a political intermediary, Kissinger met Premier Zhou Enlai, spending roughly 48 hours in China.</p>
+    <p>The primary goal of this meeting was to lay the foundation for Nixon's 1972 visit, and during the meeting, various matters were discussed, such as Taiwan and the One China vs Two Chinas issue, the Sino-Soviet Split, and Vietnam.</p>
+    <p>However, Kissinger also utilized this time to enter into discussions regarding his desire to form a closer relation between the American Military, and China. He believed that China and the United States could benefit from cooperation. Much of this was due to Kissinger's system of realpolitik which allowed him to distance ideology from utility.</p>
+    <p>To this end, Kissinger had a fateful meeting with Sun.</p>
+
+    <figure class="fig fig--wide fig--xl">
+      <img src="images/Kissingersun1.jpg" alt="Kissinger and Sun interview transcript, page 1">
+    </figure>
+
+    <figure class="fig fig--wide fig--xl">
+      <img src="images/Kissingersun2.jpg" alt="Kissinger and Sun interview transcript, page 2">
+    </figure>
+
+    <p>China and the United States would work together several times, such as in 1975, when the United States and China entered into a joint, albeit minor, military endeavor in Angola, supplying weapons to the FNLA in the civil war. Or later, in 1979, when Washington and Beijing operated joint SIGINT sites to watch for Soviet missile tests. The Chinese side of these cooperations were heavily overseen by the Sixth Circle, while the American side was overseen primarily by United States PMC groups Ironcrest International and American West Transport.</p>
+    <p>These cooperations led to the Sixth Circle and these major American PMCs beginning to partially share their intelligence networks with one another.</p>
+    <p>At the same time, the Sixth Circle began supplying weapons to the mujahideen in Afghanistan, alongside the United States, becoming the second largest supplier of weapons to the guerilla fighters. Their Afghan operations would remain in place for a decade, and lay the foundation for future Middle Eastern partnerships between the Sixth Circle and the United States, primarily on the axis of the PMC Ironcrest International.</p>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image21.jpg" alt="Henry Kissinger">
+      <figcaption>Henry Kissinger.</figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter" id="guarantee">
+    <p class="chapter__eyebrow">1980 &ndash; 1985</p>
+    <h2>THE GUARANTEE/SUN</h2>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image2.jpg" alt="Sun Xueqin in his later years">
+      <figcaption>Sun Xueqin, photographed in his later years, as he neared the completion of his manifesto.</figcaption>
+    </figure>
+
+    <blockquote>
+      <p>The temper of our time is that of increased armament. The great wars have illuminated the necessity of adaptation. An enduring state must possess, above all, a weapon of assurance: a weapon or weapons that can create and threaten absolute destruction absolutely. This is to say, a state is equal to the sum of its arms, and a state which lacks such a sum is no more a thing than a sandcastle by the sea.</p>
+      <cite>THE GUARANTEE &mdash; pg. 9, preface</cite>
+    </blockquote>
+
+    <p>Much of the text of THE GUARANTEE was developed in unison with the emerging thoughts of the times, which Sun, in his late years, immersed himself in. Notably, Sun deferred a great deal of respect to Deng Xiaoping's four modernizations, primarily along the pillars of science and national defense.</p>
+    <p>Additionally, THE GUARANTEE, as written by Sun, related some of its views of both Capitalism and Communism to the substance of Félix Guattari and Gilles Deleuze's Anti-Oedipus, Paul Virilio and Sylvère Lotringer's Pure War, and Klaus Theweleit's Männerphantasien. Of these texts, Sun agreed and aligned with Pure War and Männerphantasien, while his relation to Anti-Oedipus could best be understood as a hostile reading that agreed with and took from some ideas, while rebuking or being actively antagonistic towards others. Notably however, Sun took several terms and phrases from Anti-Oedipus which he found useful, such as codes, flows, socius and more.</p>
+    <p>From THE GUARANTEE, several core concepts could be understood:</p>
+
+    <p>Firstly, Sun's view of capitalism as a failing, axiomatic system, compared to the body of the despot, and the necessity for the monolith:</p>
+
+    <blockquote>
+      <p>The state is a machine. It is, much like a human, simply the conjunction of all its parts, of which there are countless. A state functions plainly: it is a socius which utilizes codes to direct all manner of flows. This is the purpose and nature of a state.</p>
+      <p>Capitalism is too a socius, but where a functional state codes, capitalism decodes. It is capitalism's intrinsic need for axiomization (as it is an axiomatic system) which is both its core and its folly.</p>
+      <p>A lasting, stable state requires a monolithic form, that is, a form which exists in unity within itself. Through codes, an enduring state can form and maintain a monolith, by forming a rigorous contour inside which all its contents must dwell.</p>
+      <p>Capitalism denies the monolith, for it cares not for the substance of what it consumes, merely that it can continue to consume. Capitalism, much like a thoughtless dog before a banquet, axiomizes all aspects of itself, and in doing so, creates incongruity. This dog is a machine which, through continued use, bloats itself with faulty changes, until it is creaking and breaking apart at the seams, whereas a monolith endures, coherent and sturdy.</p>
+      <cite>THE GUARANTEE &mdash; pg. 32, 1.2</cite>
+    </blockquote>
+
+    <p>Second, Sun's general attitude towards a state's nature and its relation to its weapons:</p>
+
+    <blockquote>
+      <p>Indeed, the state must, first and foremost, be an apparatus for armament.</p>
+      <p>We must grasp two facts in harmony: the state is of the people, of the culture, of the things (the buildings, the food, the objects), and that a state is, despite all that, nothing more than a factory. Each facet of this factory must work in tandem, hence the necessity for the monolith. A broken factory will never match a proper, effective one, both in quantity, and quality.</p>
+      <p>The end goal of the state is the weapon of assurance. Through which, the state proclaims: "I exist, I deserve now to exist, and I shall continue to exist."</p>
+      <cite>THE GUARANTEE &mdash; pg. 46, 1.3</cite>
+    </blockquote>
+
+    <p>Third, and finally, Sun believed that a state required academia to allow for its armament:</p>
+
+    <blockquote>
+      <p>The academic, the science, the university. These are all necessary factors for the development and maintenance of a weapon of assurance. A state must foster and maintain a strong academic class, which shall provide the backbone for its existence.</p>
+      <p>Without an effective group of scientific academics and researchers, a state will either fail to acquire a weapon of assurance, or rely on foreign entities for its assurance, neither of which are suitable for long lasting, stable statehood.</p>
+      <cite>THE GUARANTEE &mdash; pg. 64, 2.1</cite>
+    </blockquote>
+
+    <p>After THE GUARANTEE was completed, Sun passed away. The contents of his writings would become highly influential and controversial, being utilized by many different scholars, thinkers, and writers, such as Marshal Nikolai Ogarkov's History Teaches Vigilance.</p>
+  </section>
+
+  <section class="chapter" id="aftersun">
+    <p class="chapter__eyebrow">1985 &ndash; 1998</p>
+    <h2>After Sun</h2>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image15.png" alt="">
+    </figure>
+
+    <p>Under the CCP, following Sun's death, the Sixth Circle continued to operate as state-sanctioned weapons dealers, becoming a deniable asset for foreign operations. The CCP utilized the Sixth Circle to move weapons to various communist splinter cells all across the globe, alongside supplying various factions and criminal groups.</p>
+    <p>Primarily, the Sixth Circle became heavily intertwined in supplying both American Cartels and African warlords with weapons and munitions, alongside communist factions.</p>
+    <p>Through this utilization of weapons trafficking, China hoped to spread political unrest and militant chaos while also securing relationships and favors, all under the guise of an independent, state-unaffiliated arms dealer group. The primary goal was spreading unrest in targeted locations, while also creating a unified information network.</p>
+    <p>The Sixth Circle acted in tandem with China's greater soft power developments all across the world, notably in Africa. By developing infrastructure and projects in various African nations, China gained various forms of financial and political leverage. Many of these projects acted as debt-traps, designed to create an immensely oppressive, controlling financial chokehold on many developing nations which China could utilize to influence geopolitics and access tariff-free imports en masse.</p>
+  </section>
+
+  <section class="chapter" id="abstract-energy">
+    <p class="chapter__eyebrow"></p>
+    <h2>Abstract Energy</h2>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image31.webp" alt="">
+    </figure>
+
+    <p>It was during this period between the death of Sun and the later years of the organization, when the Sixth Circle began properly utilizing and experimenting in Abstract Energy.</p>
+    <p>To this end, the Sixth Circle learned from various monastic orders across China, primarily from taoists, regarding the various esoteric rituals and systems utilized for centuries by these groups. All of this was under the directive of Beijing, but it was also in coordination with the CIA, and specifically Kissinger, who determined that creating a unified body of ritual evocation could in turn allow for all manner of new opportunities in the geopolitical stage. Later, these international discussions on behalf of America would be overseen by the relatively new Federal Occult Committee.</p>
+    <p>While much of the Sixth Circle's research remained ineffectual, they did succeed in creating a rudimentary form of gift extraction, which could be used to create what we would now know as artificial gifts, or "augments". Effectively, by utilizing complicated processes, a wielder could have their life and energy drained, converted into a form of injection which could be used to temporarily allow a non-wielder to unlock and utilize their own, unique gift.</p>
+    <p>Additionally, the Sixth Circle, after much engagement with ancient taoist texts, became capable of producing Jiangshi, which they began to utilize as mindless soldiers and servants. This tradition has carried on long into the modern day, with various criminal groups in China creating and utilizing these undead beings as mindless, powerful soldiers.</p>
+  </section>
+
+  <section class="chapter" id="exceptionalism">
+    <p class="chapter__eyebrow">1977 &ndash; 2001</p>
+    <h2>Exceptionalism</h2>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image1.png" alt="Ironcrest contractors in Pakistan">
+      <figcaption>Ironcrest Contractors in Pakistan, Taken 2054.</figcaption>
+    </figure>
+
+    <p>As the Sixth Circle operated as deniable weapons-traffickers for China, they too continued their operations with Washington, almost exclusively operating in tandem with Ironcrest International. This relationship was made possible by shifts within the American intelligence apparatus. Following the congressional investigations of the mid-1970s and the subsequent restrictions placed upon covert action, direct operations by American agencies became legally and politically expensive. Rather than abandon such operations, Washington displaced them outward, into foreign proxies and private contractors, such as Ironcrest.</p>
+    <p>The Sixth Circle, as an ostensibly independent criminal organization, provided a second layer of deniability that no state actor could offer. The Sixth Circle had already proved itself capable, and had long been cooperating with Ironcrest, thus it was swept up within Washington's greater ambitions.</p>
+    <p>Kissinger left public office in 1977, and in 1982 founded a private consultancy which allowed him to maintain and monetize the relationships he had built while in government. Through this firm, he continued to broker introductions between American corporate interests and foreign governments or organizations.</p>
+    <p>His client list was never publicly disclosed.</p>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image9.png" alt="Naval Station Norfolk">
+      <figcaption>Naval Station Norfolk, acquired by Ironcrest from the United States Military in 2133.</figcaption>
+    </figure>
+
+    <p>The following year, Kissinger was appointed to chair a commission on Central America, whose findings recommended a substantial expansion of American military aid throughout the region. The resulting flow of money and material created the conditions for a sustained American expansion into South America, spearheaded by Private Military Contractors.</p>
+    <p>Ironcrest built atop existing structures: nations and corporations. The military governments of South America had spent the previous decade operating coordinated programs of surveillance, abduction and assassination, and as those governments collapsed through the 1980s, collapses orchestrated in part by the CIA, their officers and soldiers were left without employment.</p>
+    <p>Ironcrest recruited from this pool directly, inheriting experienced interrogators and death squad personnel alongside their methods. Much of Ironcrest's modern approach to domestic policing, corporate terrorism, and enhanced interrogation techniques originates here.</p>
+    <p>A private military built from the decay of Latin American dictatorships.</p>
+    <p>The Sixth Circle worked to supply this expansion, partially greenlit by Beijing, partially not. Chinese arms moved through the same trafficking networks the organization had built for the CCP. These weapons often supplied both American assets and the groups the Americans fought. This was not incongruous, as private interests demanded sustained warfare rather than resolution.</p>
+    <p>And so war was prolonged, surveillance was increased, and those in power made very, very large amounts of money.</p>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image29.png" alt="">
+    </figure>
+
+    <p>Then, there came a rupture in 1989. Following the suppression of the demonstrations at Tiananmen Square, the West imposed an arms embargo upon China, severing the official channels through which the Sixth Circle had operated abroad. Much of the Sixth Circle who operated within South America were excommunicated by Beijing, and, unable to return, found employment under Ironcrest.</p>
+    <p>These men shed their political ideology, becoming no more than mercenaries and arms dealers. Gone were the revolutionaries, the nationalists, the brothers in arms, now they were beholden only to individual fancy, and profit.</p>
+    <p>In the end, the only idea of Sun's that remained in their minds was the belief that power alone was the supreme ideal.</p>
+    <p>In 1998, leadership of the Sixth Circle transferred to Huang Renshan. Huang was, for all intents and purposes, a Technomilitant radicalist. He subscribed entirely to THE GUARANTEE, but only insofar as the idealization of the military. Huang cared little for communism, economic strategy, or social coherence.</p>
+    <p>He wished for China to enter further into a militarized state. In his view, the goal should be not only to possess a supreme military, but also to use it constantly. Usage of the military was needed for both maintenance, testing, and shows of force.</p>
+    <p>Following the September 11th 2001 attacks on the World Trade Center, America entered into a new stage of prolonged warfare in the Middle East. To Huang, America became, in many ways, the ideal: a military superpower that used their strength unabashedly. He praised the manner through which the United States consistently engaged in warfare, expanded its list of military bases, and projected strength throughout the globe.</p>
+    <p>This led to tensions within the Sixth Circle, and weakened the organization's relationship with the CCP. As a result, Huang began to engage in closer relationships with the American government, moving the Sixth Circle towards a multi-polar position. The Sixth Circle formed greater bonds with various facets of the American Military, primarily by aiding the United States in their Middle Eastern war efforts following September 11.</p>
+  </section>
+
+  <section class="chapter" id="sudan">
+    <p class="chapter__eyebrow"></p>
+    <h2>Sudan War</h2>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image11.png" alt="">
+    </figure>
+
+    <p>The Sixth Circle, as China's primary arms dealers within Africa, played a pivotal role in supplying the Sudanese Armed Forces in the Sudan War. While China officially maintained a status of neutrality, their arms shipments heavily favored the SAF over the Rapid Support Forces, who opposed the SAF in the civil war.</p>
+    <p>As the war progressed into the late 2020s, the Sixth Circle became further interwoven with the conflict, under directive of Huang. Huang wished to further increase the shipment of arms to the SAF, believing that a decisive SAF victory in Sudan would plant a powerful Chinese stronghold in Africa during a crucial moment in the shifting of the global order.</p>
+    <p>To secure these shipments, Huang rerouted Chinese weapons bound for other nations to instead be shipped to the SAF. In effect, Huang disobeyed the directives of the CCP, and wagered that such disobedience would pay off if the SAF achieved a decisive victory.</p>
+    <p>Before embarking on his wager, Huang gathered many high ranking members of the Sixth Circle, alongside the rank-and-file. He gave this address, of which a transcript was saved, and distributed to some who could not make it:</p>
+
+    <blockquote>
+      <p>I am aware, as I always am, of the dissenters amongst you. Those who think my leadership ill-wrought, those who think my politics ill-conceived. I ask of you this: are you idealists, stuck in fanciful dreams, or are you men of the earth, of this earth? Where, I ask, do you believe we shall find ourselves if all we ever do is espouse belief, if all we ever do is remain rigorous in our politics and never change? Where, I ask, do you believe we shall find ourselves if we never take initiative, never move as we ourselves wish?</p>
+      <p><i>[A pause of three seconds, accompanied by murmuring in the crowd]</i></p>
+      <p>We shall arrive at nothing, nowhere. We will forever circle the same existence, the same actions, the same outcomes, and wait for someone else to make change. But that is wrong. We are the change, do not forget that!</p>
+      <p><i>[A general murmur of approval]</i></p>
+      <p>And so I ask this too! Do you not think yourself capable? Do you not think yourself intelligent? Must you have a leash, to be guided with, or can you roam free of the hand that feeds, and hunt for yourself?</p>
+      <p>And what of us, I ask? Your comrades too? Do you not think them intelligent, or capable? Are we not all hunters, not all savage and clever and potent? Shall we live our lives forever on the leash, in the house, waiting for the master?</p>
+      <p>No. I think not! We are more than that! Our belief makes us more than that. Sun Xueqin, Guo Weiguo, those who made us, were more than that! Now, we shall prove it.</p>
+      <p><i>[Loud applause and cheers accompanied the end of the speech]</i></p>
+    </blockquote>
+
+    <p>When the speech concluded, Huang stood in a firm pose for several seconds, right arm raised, left arm lowered, head held high. The light caught him from below and illuminated the planes of his face, darkened the grooves of his eyes, mouth, and nose; darkened those grooves to a pitch, and he looked, for a moment, inhuman.</p>
+    <p>With these weapons, the SAF indeed managed several notable victories over the RSF, however, these victories were soon followed by ethnic targeting.</p>
+
+    <figure class="fig fig--wide fig--xl">
+      <img src="images/sudanwar.jpg" alt="A damaged street in the city of Omdurman">
+      <figcaption>A damaged street in the city of Omdurman</figcaption>
+    </figure>
+
+    <p>The RSF, as an Arab paramilitary organization, had long since persecuted non-Arab civilians, constituting a genocide as agreed upon by the United Nations and several other entities. With sizeable victories occurring all at once, the SAF conducted a retaliatory genocide of Arabs all across seized territories.</p>
+    <p>The death toll within one week rose to nearly ten thousand.</p>
+    <p>China condemned these actions, and forcibly cut the Sixth Circle off from Sudan. The situation became a political crisis as the international forums discovered that the SAF were utilizing primarily Chinese arms and equipment to continue their war effort and perpetuate the genocide. The blame was placed on the Sixth Circle, specifically on Huang, who was sentenced to be executed for treason.</p>
+    <p>Huang sought to flee to a refuge in South America, but before he could, was betrayed by his own guard, captured, and returned to Beijing, then shipped to Hong Kong.</p>
+  </section>
+
+  <section class="chapter" id="huang">
+    <p class="chapter__eyebrow"></p>
+    <h2>Huang</h2>
+
+    <p>The execution was to be handled not by Beijing, not by the Party, but by the Sixth Circle. This was their request, for they wished to be the ones to execute the traitor, and to make of it a spectacle. Whether this was loyalty, or a desire from the new leadership to prove obedience to Beijing, remains unknown.</p>
+    <p>Beijing refused, at first, but were persuaded by the imagery: the Sixth Circle killing the traitor, their former leader, themselves before a crowd of their own. It would set a precedent to all those in attendance: obey the party, obey Beijing.</p>
+    <p>The execution was scheduled exactly at noon in a large square, a square long since owned and used by the Sixth Circle for addresses and meetings.</p>
+    <p>It was floored in stone slabs, overlooked by a towering, reddish-orange statue of Mao Zedong, who stood with a firm, judgemental expression. He was flanked by two smaller statues, Guo, and Sun.</p>
+    <p>A crowd had gathered by the time the sun reached its apex behind the clouds, a crowd that numbered in the hundreds, each a member of the Sixth Circle, jam-packed into that square until the place felt at once cramped, and the air turned warm and dense in the way that only a mass of people could cause.</p>
+    <p>There was a wide platform, elevated, beneath the three statues.</p>
+    <p>Huang stepped out onto the platform to a flurry of insults and expletives. Two men followed him, ensuring he did not attempt to run. He walked with his head held high, in spite of the bruises and cuts littering his battered form beneath the ragged clothes he wore.</p>
+    <p>And it was there that Huang was held in place, a noose tied around his neck, slowly, to give the crowd time to pelt him with all manner of things: pebbles, fruits, glass. When finally the noose was tied, he was given the opportunity to speak. He turned back to face the statues, and said only this:</p>
+
+    <blockquote>
+      <p>I have never betrayed you, and I have succeeded.</p>
+    </blockquote>
+
+    <p>And then the floor opened beneath him, and his broken body fell, and his neck too became broken. Then he died, with little movement or thrashing, and to roaring applause.</p>
+  </section>
+
+  <section class="chapter" id="modernity">
+    <p class="chapter__eyebrow">2218</p>
+    <h2>Modernity</h2>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image17.png" alt="">
+    </figure>
+
+    <p>After the death of Huang, the Sixth Circle shrunk slowly within China. Those remaining elements of the Sixth Circle outside of China chose to ensure their existence by consolidating under Washington, regrouping with former comrades now employed by Ironcrest, and joining up with the PMC.</p>
+    <p>Many of these individuals were those in charge of researching and developing Abstract Energy under the Sixth Circle, and as a result, the United States offered them amnesty and protection in exchange for their knowledge. Ironcrest, because of this, creates and utilizes their own modified form of Jiangshi, although this usage is sparse, both to avoid criticism from the public, and also not to alert the watchful eye of the U.N.W.C.</p>
+
+    <figure class="fig fig--wide fig--start">
+      <img src="images/image16.png" alt="">
+    </figure>
+
+    <p>To ensure their survival, the remaining Chinese leadership of the Sixth Circle focused their efforts on stabilizing the organization within the scope of a single city: Hong Kong.</p>
+    <p>Over nearly a century, the Sixth Circle continued to slowly shrink, before finally stabilizing into a sizable, but notably not major, faction within China.</p>
+    <p>In the modern day, the Sixth Circle remains mostly as a relic of a bygone era: a truly communist China, a revolutionary ideal, a changing world. The organization has become nothing more than arms dealers and weapons traffickers, albeit with a political belief. Of this belief however, little has come, as the Sixth Circle of the modern day lacks the ambition or desire to push for any change.</p>
+
+    <figure class="fig fig--wide fig--xl fig--start">
+      <img src="images/image25.png" alt="">
+    </figure>
+
+    <p>This is not to say the organization is small, or irrelevant. They possess a notable amount of power within Hong Kong, connections around China and Asia, and their name still holds some merit within the West, mostly due to their long-ago defecting members who joined Ironcrest.</p>
+    <p>In this way, the Sixth Circle endures as nothing more than a shell, the dog on the leash, not aspiring, not chasing, simply content.</p>
+  </section>
+
+</main>
+
+<input class="vol" id="vol" type="range" min="0" max="1" step="0.01" value="1" aria-label="Volume">
+
+<script>
+/* ============================================================
+   AUDIO SYSTEM
+   ------------------------------------------------------------
+   Layers:
+     - ambience   : siteambience.mp3, constant low-volume loop,
+                    ducks out under "sudan" and "modernity" so the
+                    chapter-specific ambience below can take over.
+     - gunfire    : gunfire.mp3, replaces the base ambience solely
+                    during the "sudan" chapter.
+     - modernAmbient : modernambient.mp3, replaces the base ambience
+                    solely during the "modernity" chapter (the last
+                    chapter, so no fade-out at the end).
+     - music      : generalmusic.mp3, plays across the whole
+                    site, ducks out under the "america"/"kissinger"
+                    zone (from "sudan" onward).
+     - america    : america (1).mp3 / america (2).mp3, alternate
+                    back-to-back with a short crossfade so the
+                    loop is gapless. Starts right after the
+                    "exceptionalism" block ends (i.e. at "sudan")
+                    and plays through to the end of the site.
+     - mentalism  : layered atop music+ambience across
+                    "upheaval"/"japan"/"militant-mind", starts (and
+                    loops from) a random point between 15-25s into
+                    the track with a slight fade-in, routed through
+                    a reverb/grain effects chain. Fades to silence
+                    by the start of "new-communism", which is left
+                    with just music+ambience as breathing room.
+     - capitalism : same treatment, across "divisions"/"return"/
+                    "america" (American Cooperation)/"the guarantee/
+                    sun". Silent through "aftersun"/"abstract-energy",
+                    which are left as breathing room before kissinger
+                    picks up.
+     - kissinger  : same treatment, starts as "exceptionalism" begins
+                    (one chapter ahead of the america tracks) and
+                    continues through "sudan"/"huang"/"modernity" to
+                    the end of the site.
+
+   Position is a fractional chapter index (0..chapters-1) driven
+   by scroll, smoothed with a simple per-frame ease so crossfades
+   never pop.
+   ============================================================ */
+
+const AMBIENCE_GAIN = 0.1;
+const MUSIC_GAIN    = 0.13;
+const AMERICA_GAIN  = 0.2;
+const MENTAL_GAIN   = 0.32;
+const CAPITAL_GAIN  = 0.41;
+const KISSINGER_GAIN = 0.77;
+const GUNFIRE_GAIN  = 0.55;
+const MODERN_AMBIENT_GAIN = 0.043;
+
+const AMERICA_ZONE   = { from:14,  to:16.999, fade:1.8 };
+const MENTAL_ZONE    = { from:3,   to:5.7,    fade:0.3 };
+const CAPITAL_ZONE   = { from:7,   to:10.7,   fade:0.3 };
+const KISSINGER_ZONE = { from:13,  to:16.999, fade:0.3 };
+const SUDAN_ZONE      = { from:14,  to:14.7,   fade:0.3 }; // "sudan" chapter only
+const MODERN_ZONE     = { from:16,  to:16.999, fade:0.3 }; // "modernity", last chapter
+
+const AMERICA_OVERLAP  = 0.35; // seconds of crossfade between alternating tracks
+const MENTAL_START_MIN = 15;   // random start/loop point into mentalism.mp3
+const MENTAL_START_MAX = 25;
+const MENTAL_FADE_IN_MS = 2200; // slight fade-in when mentalism kicks in
+const CAPITAL_START    = 0;
+const KISSINGER_START  = 0;
+
+let MASTER = 1.0; // driven by the slider
+const EASE = 0.05;
+
+/* ---------- Web Audio context (for the effected layers) ---------- */
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+const ctx = new AudioCtx();
+
+function makeDistortionCurve(amount){
+  const n = 44100, curve = new Float32Array(n), deg = Math.PI/180;
+  for(let i=0;i<n;i++){
+    const x = i*2/n - 1;
+    curve[i] = (3+amount)*x*20*deg / (Math.PI + amount*Math.abs(x));
+  }
+  return curve;
+}
+
+function makeImpulse(duration, decay){
+  const rate = ctx.sampleRate, len = Math.max(1, Math.floor(rate*duration));
+  const buf = ctx.createBuffer(2, len, rate);
+  for(let c=0;c<2;c++){
+    const data = buf.getChannelData(c);
+    for(let i=0;i<len;i++) data[i] = (Math.random()*2-1) * Math.pow(1 - i/len, decay);
+  }
+  return buf;
+}
+
+function buildEffectedLayer(src, { grain, reverbSize, reverbDecay, dryMix }){
+  const el = new Audio(src);
+  el.preload = 'auto';
+  el.loop = false;
+  el.volume = 1;
+
+  const source   = ctx.createMediaElementSource(el);
+  const shaper   = ctx.createWaveShaper();
+  shaper.curve = makeDistortionCurve(grain);
+  shaper.oversample = '2x';
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.value = 1400;
+  filter.Q.value = 0.6;
+
+  const convolver = ctx.createConvolver();
+  convolver.buffer = makeImpulse(reverbSize, reverbDecay);
+
+  const dryGain = ctx.createGain();
+  dryGain.gain.value = dryMix;
+  const wetGain = ctx.createGain();
+  wetGain.gain.value = 1 - dryMix;
+
+  const trackGain = ctx.createGain();
+  trackGain.gain.value = 0;
+
+  source.connect(shaper);
+  shaper.connect(filter);
+  filter.connect(dryGain);
+  filter.connect(convolver);
+  convolver.connect(wetGain);
+  dryGain.connect(trackGain);
+  wetGain.connect(trackGain);
+  trackGain.connect(ctx.destination);
+
+  return { el, trackGain, vol:0, dead:false };
+}
+
+/* ---------- plain layers (ambience / music / america) ---------- */
+const ambience = { el:new Audio('sounds/siteambience.mp3'), vol:0, dead:false };
+ambience.el.loop = true;
+ambience.el.preload = 'auto';
+ambience.el.volume = 0;
+
+const gunfire = { el:new Audio('sounds/gunfire.mp3'), vol:0, dead:false };
+gunfire.el.loop = true;
+gunfire.el.preload = 'auto';
+gunfire.el.volume = 0;
+
+const modernAmbient = { el:new Audio('sounds/modernambient.mp3'), vol:0, dead:false };
+modernAmbient.el.loop = true;
+modernAmbient.el.preload = 'auto';
+modernAmbient.el.volume = 0;
+
+const MUSIC_FADE_IN_MS = 3000;
+const music = {
+  el:new Audio('sounds/generalmusic.mp3'), vol:0, dead:false, fadeInStart:null,
+  startAt: 5 + Math.random() * (240 - 5), seeded:false,
+};
+music.el.loop = true;
+music.el.preload = 'auto';
+music.el.volume = 0;
+
+const americaEls = ['sounds/america (1).mp3','sounds/america (2).mp3'].map(src=>{
+  const el = new Audio(src);
+  el.preload = 'auto';
+  el.loop = false;
+  el.volume = 0;
+  return el;
+});
+let americaIdx = 0;
+let americaSwitching = false;
+
+americaEls.forEach((el,i)=>{
+  el.addEventListener('timeupdate', ()=>{
+    if(i !== americaIdx || americaSwitching) return;
+    if(el.duration && el.duration - el.currentTime <= AMERICA_OVERLAP){
+      americaSwitching = true;
+      const next = americaEls[(i+1)%americaEls.length];
+      next.currentTime = 0;
+      next.play().catch(()=>{});
+      next._fadeIn = performance.now();
+      el._fadeOut = performance.now();
+    }
+  });
+  el.addEventListener('ended', ()=>{
+    if(i === americaIdx){
+      americaIdx = (i+1)%americaEls.length;
+      americaSwitching = false;
+    }
+  });
+  el.addEventListener('error', ()=>{ el._dead = true; });
+});
+
+function americaMultiplier(el, i, now){
+  if(el._fadeIn !== undefined){
+    const t = (now - el._fadeIn)/(AMERICA_OVERLAP*1000);
+    if(t >= 1){ delete el._fadeIn; return 1; }
+    return t;
+  }
+  if(el._fadeOut !== undefined){
+    const t = (now - el._fadeOut)/(AMERICA_OVERLAP*1000);
+    if(t >= 1){ delete el._fadeOut; return 0; }
+    return 1 - t;
+  }
+  return i === americaIdx ? 1 : 0;
+}
+
+/* ---------- effected layers ---------- */
+const mentalism  = buildEffectedLayer('sounds/mentalism.mp3',  { grain:10, reverbSize:2.6, reverbDecay:3.2, dryMix:0.3 });
+const capitalism = buildEffectedLayer('sounds/capitalism.mp3', { grain:8,  reverbSize:2.2, reverbDecay:2.8, dryMix:0.35 });
+const kissinger  = buildEffectedLayer('sounds/kissinger.mp3',  { grain:8,  reverbSize:2.2, reverbDecay:2.8, dryMix:0.35 });
+mentalism.fadeInStart = null;
+
+const MENTAL_START = MENTAL_START_MIN + Math.random() * (MENTAL_START_MAX - MENTAL_START_MIN);
+// seeded lazily on first real playback (applyEffected), once metadata is
+// guaranteed to be loaded -- seeking this early can silently no-op.
+mentalism.startAt = MENTAL_START;
+mentalism.seeded  = false;
+
+function loopFrom(layer, startAt){
+  layer.el.addEventListener('ended', ()=>{
+    layer.el.currentTime = startAt;
+    layer.el.play().catch(()=>{});
+  });
+}
+loopFrom(mentalism, MENTAL_START);
+loopFrom(capitalism, CAPITAL_START);
+loopFrom(kissinger, KISSINGER_START);
+
+/* ---------- scroll position ---------- */
+const chapters = [...document.querySelectorAll('.chapter')];
+let bounds = [];
+
+function measure(){
+  bounds = chapters.map(el => {
+    const r = el.getBoundingClientRect();
+    return { top:r.top + window.scrollY, height:Math.max(r.height,1) };
+  });
+}
+
+function chapterPos(){
+  if(!bounds.length) return 0;
+  const eye = window.scrollY + window.innerHeight * 0.45;
+  if(eye <= bounds[0].top) return 0;
+  const last = bounds[bounds.length-1];
+  if(eye >= last.top + last.height) return bounds.length - 1 + 0.999;
+  for(let i=0;i<bounds.length;i++){
+    const b = bounds[i];
+    if(eye >= b.top && eye < b.top + b.height) return i + (eye - b.top)/b.height;
+  }
+  return 0;
+}
+
+function envelope(pos, zone){
+  const a = zone.from - zone.fade, z = zone.to + zone.fade;
+  if(pos <= a || pos >= z) return 0;
+  if(pos < zone.from) return (pos - a)/zone.fade;
+  if(pos <= zone.to)  return 1;
+  return 1 - (pos - zone.to)/zone.fade;
+}
+
+function approach(current, target){ return current + (target - current) * EASE; }
+
+function applyPlain(layer, target){
+  layer.vol = approach(layer.vol, target);
+  if(layer.dead) return;
+  if(layer.vol > 0.003){
+    let vol = Math.min(1, layer.vol);
+    if(layer.el.paused){
+      if('fadeInStart' in layer && layer.fadeInStart === null) layer.fadeInStart = performance.now();
+      if('startAt' in layer && !layer.seeded){
+        layer.seeded = true;
+        layer.el.currentTime = layer.startAt;
+      }
+      layer.el.play().catch(()=>{});
+    }
+    if('fadeInStart' in layer && layer.fadeInStart !== null){
+      const ramp = Math.min(1, (performance.now() - layer.fadeInStart) / MUSIC_FADE_IN_MS);
+      vol *= ramp;
+    }
+    layer.el.volume = vol;
+  } else {
+    layer.el.volume = 0;
+    if(!layer.el.paused) layer.el.pause();
+  }
+}
+
+function applyEffected(layer, target){
+  layer.vol = approach(layer.vol, target);
+  if(layer.vol > 0.003){
+    let vol = Math.min(1, layer.vol);
+    if(layer.el.paused){
+      if('fadeInStart' in layer && layer.fadeInStart === null) layer.fadeInStart = performance.now();
+      if('startAt' in layer && !layer.seeded){
+        layer.seeded = true;
+        layer.el.currentTime = layer.startAt;
+      }
+      layer.el.play().catch(()=>{});
+    }
+    if('fadeInStart' in layer && layer.fadeInStart !== null){
+      const ramp = Math.min(1, (performance.now() - layer.fadeInStart) / MENTAL_FADE_IN_MS);
+      vol *= ramp;
+    }
+    layer.trackGain.gain.value = vol;
+  } else {
+    layer.trackGain.gain.value = 0;
+    if(!layer.el.paused) layer.el.pause();
+  }
+}
+
+let started = false;
+
+function frame(){
+  const pos = chapterPos();
+  const now = performance.now();
+
+  const americaEnv   = envelope(pos, AMERICA_ZONE);
+  const mentalEnv    = envelope(pos, MENTAL_ZONE);
+  const capitalEnv   = envelope(pos, CAPITAL_ZONE);
+  const kissingerEnv = envelope(pos, KISSINGER_ZONE);
+  const sudanEnv     = envelope(pos, SUDAN_ZONE);
+  const modernEnv    = envelope(pos, MODERN_ZONE);
+
+  applyPlain(ambience, AMBIENCE_GAIN * (1 - sudanEnv) * (1 - modernEnv) * MASTER);
+  applyPlain(gunfire, GUNFIRE_GAIN * sudanEnv * MASTER);
+  applyPlain(modernAmbient, MODERN_AMBIENT_GAIN * modernEnv * MASTER);
+  applyPlain(music, MUSIC_GAIN * (1 - americaEnv) * MASTER);
+
+  americaEls.forEach((el,i)=>{
+    const mult = americaMultiplier(el, i, now);
+    const target = americaEnv * AMERICA_GAIN * MASTER * mult;
+    el._vol = approach(el._vol || 0, target);
+    if(el._dead) return;
+    if(el._vol > 0.003){
+      el.volume = Math.min(1, el._vol);
+      if(el.paused) el.play().catch(()=>{});
+    } else {
+      el.volume = 0;
+      if(!el.paused) el.pause();
+    }
+  });
+
+  applyEffected(mentalism, mentalEnv * MENTAL_GAIN * MASTER);
+  applyEffected(capitalism, capitalEnv * CAPITAL_GAIN * MASTER);
+  applyEffected(kissinger, kissingerEnv * KISSINGER_GAIN * MASTER);
+
+  requestAnimationFrame(frame);
+}
+
+const gate = document.getElementById('gate');
+const vol  = document.getElementById('vol');
+
+function primeAll(){
+  const els = [ambience.el, gunfire.el, modernAmbient.el, music.el, ...americaEls, mentalism.el, capitalism.el, kissinger.el];
+  els.forEach(el => {
+    el.play().then(()=>{ el.pause(); }).catch(()=>{});
+  });
+}
+
+function enter(){
+  if(started) return;
+  started = true;
+  gate.classList.add('is-gone');
+  document.body.classList.remove('is-locked');
+  vol.classList.add('is-on');
+  measure();
+  ctx.resume().catch(()=>{});
+  primeAll();
+  requestAnimationFrame(frame);
+}
+
+gate.addEventListener('click', enter);
+window.addEventListener('keydown', enter, { once:true });
+
+vol.addEventListener('input', () => { MASTER = parseFloat(vol.value); });
+
+/* keep the effects context alive when the tab regains focus; the rAF
+   loop itself just pauses harmlessly while hidden, no catch-up needed */
+document.addEventListener('visibilitychange', () => {
+  if(!document.hidden && ctx.state === 'suspended') ctx.resume().catch(()=>{});
+});
+
+let rt = null;
+window.addEventListener('resize', () => {
+  clearTimeout(rt);
+  rt = setTimeout(measure, 150);
+});
+window.addEventListener('load', measure);
+measure();
+</script>
+</body>
+</html>
